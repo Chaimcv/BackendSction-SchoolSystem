@@ -19,7 +19,7 @@ const createTeacher=async(req,res)=>{
            subject:subject,
           standard:standard
         });
-        await newTeacher.save;
+        await newTeacher.save();
         const resData={
             name:newTeacher.name
         }

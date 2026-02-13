@@ -11,6 +11,7 @@ const TeacherRouter = require("./Routes/TeacherRoute");
 
 
 // Middleware
+app.use(express.json());
 app.use(bodyParser.json());
 DbConnection();
 
