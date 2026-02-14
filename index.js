@@ -1,17 +1,3 @@
- const[data,setData]=useState([]);
-
-  useEffect(() => {
-  fetch('http://127.0.0.1:8000/teacher') //backend connection api
-    .then((res) => res.json())
-    .then((data) => setData(data.message)
-  );
-
-}, []);
-console.log(data,"data accessed from backend");
-
-
-
-
 const express=require("express");
 const app=express();
 const mongoose = require('mongoose');
