@@ -5,7 +5,7 @@ const TeacherModel=require("../Models/TeacherModel");
 //posting data to db-(teachers)
 const createTeacher=async(req,res)=>{              
     console.log("api called");
-    const {name,address,phonenumber,subject,standard}=req.body;   //data from frontend-- api
+    const {name,pin,city,phonenumber,subject,standard}=req.body;   //data from frontend-- api
       
     if(!name){
         return res.send({
