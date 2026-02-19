@@ -1,11 +1,22 @@
 //Teacher manipulation
 const TeacherModel=require("../Models/TeacherModel");
+const crypto = require('crypto');
+const generator=require("generate-password");
 
                                       //http://127.0.0.1:8000/teacher
 //posting data to db-(teachers)
 const createTeacher=async(req,res)=>{              
     console.log("api called");
-    const {name,email,password,pin,city,phonenumber,subject,standard}=req.body;   //data from frontend-- api
+
+//password creation
+const password = generator.generate({
+    length: 10,
+    numbers: true
+});
+
+console.log(password);
+
+    const {name,email,pin,city,phonenumber,subject,standard}=req.body;   //data from frontend-- api
       
     if(!name){
         return res.send({
@@ -152,6 +163,17 @@ const TeacherLogin=async(req,res)=>{
                 }
             })
         }
+
+
+function generateRandomToken(length = 32) {
+  // Generate random bytes and convert to a hex string
+  return crypto.randomBytes(length).toString('hex');
+}
+const token = generateRandomToken();
+console.log(token);
+
+
+
     } catch (error) {
         
     }

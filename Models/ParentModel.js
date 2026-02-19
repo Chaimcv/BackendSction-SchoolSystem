@@ -1,0 +1,29 @@
+const mongoose=require("mongoose");
+const ParentSchema=mongoose.Schema({
+    Name:{
+        type:String
+    },
+    email:{
+        type:String
+    },
+    password:{
+        type:String
+    },
+    Student_name:{
+      type:String
+    },
+    student_id:{
+        type:String
+    },
+    address:{
+        type:String
+    },
+    pincode:{
+        type:String
+    }
+},
+{
+    Timestamp:true
+},
+)
+module.exports=mongoose.model("Parents",ParentSchema);
