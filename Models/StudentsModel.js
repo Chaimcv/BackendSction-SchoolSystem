@@ -3,6 +3,14 @@ const StudentSchema=mongoose.Schema({
     Name:{
       type:String
     },
+    Email:{
+        type:String,
+        require:true,
+        unique:true
+    },
+    Password:{
+        type:String
+    },
     Age:{
        type:String
     },

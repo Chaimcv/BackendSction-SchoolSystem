@@ -2,12 +2,14 @@ const StudentModel=require("../Models/StudentsModel");
 //const { get } = require("../Routes/StudentsRoute");
 
 const createStudent=async(req,res)=>{
-     const {name,age,gender,standard,guardian,guardian_phonenumber,division,address,pincode}=req.body; 
+     const {name,age,email,password,gender,standard,guardian,guardian_phonenumber,division,address,pincode}=req.body; 
 
-
+//password generation
  try{
         const newStudent=new StudentModel({  //storing data to db
            Name:name,
+           Email:email,
+           Password:password,
            Age:age, 
            Gender:gender,
           Standard:standard,
