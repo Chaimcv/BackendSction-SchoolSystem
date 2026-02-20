@@ -125,20 +125,20 @@ const deleteParent=async(req,res)=>{
 }
 //Login
 const ParentLogin=async(req,res)=>{
-    const{email,password}=req.body;
+    const{inputtedEmail,inputtedPassword}=req.body;
     try {
-        if(!email||!password){
+        if(!inputtedEmail||!inputtedPassword){
             res.send({
                 message:"Enter Valid email and password"
             })
         }
-        const fetchedParentData=await ParentModel.findOne({email:email});
+        const fetchedParentData=await ParentModel.findOne({email:inputtedEmail});
         if(!fetchedParentData){
             res.send({
                 message:"No matching email found"
             })
         }
-        if(fetchedParentData.password===password)
+        if(fetchedParentData.inputtedPassword===password)
         {
             res.send({
                 message:"Login Successful",
