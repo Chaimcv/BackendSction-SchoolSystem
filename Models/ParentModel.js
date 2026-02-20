@@ -4,16 +4,21 @@ const ParentSchema=mongoose.Schema({
         type:String
     },
     email:{
-        type:String
+        type:String,
+        require:true
     },
     password:{
-        type:String
+        type:String,
+        require:true
     },
     Student_name:{
       type:String
     },
     student_id:{
         type:String
+    },
+    phonenumber:{
+        type:Number
     },
     address:{
         type:String

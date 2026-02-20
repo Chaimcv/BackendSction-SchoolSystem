@@ -24,6 +24,7 @@ DbConnection();
 
 app.use("/teacher",TeacherRouter);                          //teacher section route
 app.use("/student",StudentRouter);
+//app.use("/parent",Pare)
 
 
 //dAsnOnxqI61p9HFo

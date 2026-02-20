@@ -18,7 +18,7 @@ const TeacherSchema=mongoose.Schema({
         type:String
     },
     pin:{
-        type:String
+        type:Number
     },
     phoneNumber:{
         type:Number

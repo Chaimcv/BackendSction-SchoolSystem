@@ -9,10 +9,11 @@ const StudentSchema=mongoose.Schema({
         unique:true
     },
     Password:{
-        type:String
+        type:String,
+        require:true
     },
     Age:{
-       type:String
+       type:Number
     },
     Gender:{
       type:String
