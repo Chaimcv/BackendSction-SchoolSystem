@@ -10,9 +10,10 @@ const DbConnection=require("./config/ConnectDB");
 const TeacherRouter = require("./Routes/TeacherRoute");
 const StudentRouter =require("./Routes/StudentsRoute");
 const ParentRouter = require("./Routes/ParentRoute");
-
+const AnnouncementRouter = require("./Routes/AnnouncementRoute");
 //to establish connection btw frontend and backend
 const cors = require('cors');
+
 app.use(cors({ origin: ['http://localhost:3000'] }));       //frontend runs in port 3000
 
 
@@ -25,6 +26,7 @@ DbConnection();
 app.use("/teacher",TeacherRouter);                          //teacher section route
 app.use("/student",StudentRouter);
 app.use("/parent",ParentRouter);
+app.use("/announcements",AnnouncementRouter);
 
 
 //dAsnOnxqI61p9HFo

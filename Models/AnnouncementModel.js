@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const AnnouncementSchema=mongoose.Schema({
     Image:{
-    type:
+    type:String
     },
     Text:{
         type:String
