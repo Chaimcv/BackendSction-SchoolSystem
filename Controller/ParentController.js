@@ -14,6 +14,7 @@ const createParent=async(req,res)=>{
     console.log(password);
 
     const{name,email,studentname,studentId,phonenumber,address,pincode}=req.body;
+    console.log({name},"name");
     try{
        const newParent=new ParentModel({
         Name:name,
