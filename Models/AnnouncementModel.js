@@ -10,4 +10,4 @@ const AnnouncementSchema=mongoose.Schema({
 {
     Timestamp:true
 })
-mongoose.exports=mongoose.model("announcement",AnnouncementSchema);
+module.exports=mongoose.model("announcement",AnnouncementSchema);
