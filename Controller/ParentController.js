@@ -3,6 +3,9 @@ const mongoose=require("mongoose");
 const crypto=require("crypto");
 const generator=require("generate-password");
 
+const upload=require("../middleware/uploads");
+
+
 
 const createParent=async(req,res)=>{
     console.log("parent api called");
@@ -13,7 +16,9 @@ const createParent=async(req,res)=>{
     });
     console.log(password);
 
-    const{name,email,studentname,studentId,phonenumber,address,pincode}=req.body;
+
+
+    const{name,email,studentname,studentId,phonenumber,address,pincode,image}=req.body;
     console.log({name},"name");
     try{
        const newParent=new ParentModel({
@@ -24,7 +29,8 @@ const createParent=async(req,res)=>{
         phonenumber,
         address,
         pincode,
-        password
+        password,
+        image:req.upload
        });
        await newParent.save();
        const resData={
@@ -148,8 +154,8 @@ const token = generateRandomToken();
                 message:"Login Successful",
                 data:{
                     email:fetchedParentData.email,
-                    token:token
-                    //image
+                    token:token,
+                    image:fetchedParentData.image     //profile pic url
                 }
             })
         }

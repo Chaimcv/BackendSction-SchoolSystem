@@ -25,6 +25,9 @@ const ParentSchema=mongoose.Schema({
     },
     pincode:{
         type:String
+    },
+    image:{
+        type:String
     }
 },
 {
