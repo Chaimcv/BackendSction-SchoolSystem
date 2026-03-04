@@ -139,12 +139,16 @@ const ParentLogin=async(req,res)=>{
                 message:"No matching email found"
             })
         }
-        if(fetchedParentData.inputtedPassword===password)
+        if(fetchedParentData.password===inputtedPassword)
         {
+
+const token = generateRandomToken();
+            
             res.send({
                 message:"Login Successful",
                 data:{
-                    email:fetchedParentData.email
+                    email:fetchedParentData.email,
+                    token:token
                     //image
                 }
             })
@@ -155,8 +159,8 @@ function generateRandomToken(length = 32) {
   // Generate random bytes and convert to a hex string
   return crypto.randomBytes(length).toString('hex');
 }
-const token = generateRandomToken();
-console.log(token);
+//const token = generateRandomToken();
+//console.log(token);
 
 
 
