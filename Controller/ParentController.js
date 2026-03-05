@@ -37,7 +37,8 @@ const createParent=async(req,res)=>{
         name:newParent.Name,
         student_name:newParent.Student_name,
         email:newParent.email,
-        password:password
+        password:password,
+        image
        }
        console.log(resData);
        res.send({
