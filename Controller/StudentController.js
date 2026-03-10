@@ -97,7 +97,7 @@ const updateStudent=async(req,res)=>{
        }
 
        const updateStudent=await StudentModel.findByIdAndUpdate(
-        id,
+        _id,
         req.body,
         {new:true}
     );
