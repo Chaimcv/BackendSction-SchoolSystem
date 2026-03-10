@@ -99,7 +99,7 @@ const updateStudent=async(req,res)=>{
        const updateStudent=await StudentModel.findByIdAndUpdate(
         id,
         req.body,
-        {new:true}
+         { returnDocument: "after" }                      // {new:true}
     );
     res.send({
         message:"updated studennt data",

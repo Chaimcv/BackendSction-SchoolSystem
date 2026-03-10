@@ -112,7 +112,7 @@ const updateTeacher=async(req,res)=>{
        const updatedTeacher=await TeacherModel.findByIdAndUpdate(
         id,
         req.body,
-        {new:true}
+         { returnDocument: "after" }                 //{new:true} replaced in new version
     );
     res.send({
         message:"updated teacher data",

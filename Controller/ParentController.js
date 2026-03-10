@@ -104,7 +104,7 @@ const updateParent=async(req,res)=>{
        const updatedParent=await ParentModel.findByIdAndUpdate(
         id,
         req.body,
-        {new:true}
+       { returnDocument: "after" } 
     );
     res.send({
         message:"updated parent data",
