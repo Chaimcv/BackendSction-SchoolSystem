@@ -156,6 +156,7 @@ const token = generateRandomToken();
                 data:{
                     email:fetchedParentData.email,
                     token:token,
+                    id:fetchedParentData._id,
                     image:fetchedParentData.image     //profile pic url
                 }
             })
