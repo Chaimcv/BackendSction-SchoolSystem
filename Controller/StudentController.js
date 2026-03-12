@@ -67,11 +67,11 @@ const getStudentById=async(req,res)=>{
         const Student=await StudentModel.findById(id);
         if(!Student){
             res.send({
-                message:"Teachers data not available"
+                message:"Student data not available"
             })
         }
         res.send({
-            message:"Teacher datafetched successfully",
+            message:"Student data fetched successfully",
             data:Student
         })
     }catch(error){
