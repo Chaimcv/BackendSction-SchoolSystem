@@ -135,6 +135,7 @@ const deleteParent=async(req,res)=>{
    })
 }
 //Login
+const jwt = require("jsonwebtoken");
 const ParentLogin=async(req,res)=>{
     const{inputtedEmail,inputtedPassword}=req.body;
     try {
@@ -149,6 +150,38 @@ const ParentLogin=async(req,res)=>{
                 message:"No matching email found"
             })
         }
+
+
+        //to be edited
+const isMatch = await bcrypt.compare(password, user.password);
+
+if (!isMatch) {
+ return res.send({
+   message: "Invalid password"
+ });
+}
+
+const token = jwt.sign(
+  { id: user._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
+
+res.send({
+ message: "Login successful",
+ token: token,
+ user: user
+});
+
+} catch (error) {
+
+res.send({
+ message: "Error in login"
+});
+
+}
+//to be edited
+
         if(fetchedParentData.password===inputtedPassword)
         {
 
