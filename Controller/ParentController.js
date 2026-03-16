@@ -140,20 +140,20 @@ const ParentLogin=async(req,res)=>{
     const{inputtedEmail,inputtedPassword}=req.body;
     try {
         if(!inputtedEmail||!inputtedPassword){
-            res.send({
+            return res.send({
                 message:"Enter Valid email and password"
             })
         }
         const fetchedParentData=await ParentModel.findOne({email:inputtedEmail});
         if(!fetchedParentData){
-            res.send({
+           return res.send({
                 message:"No matching email found"
             })
         }
 
 
         //to be edited
-const isMatch = await bcrypt.compare(password, fetchedParentData.password);
+const isMatch = await bcrypt.compare(inputtedPassword, fetchedParentData.password);
 
 if (!isMatch) {
  return res.send({
