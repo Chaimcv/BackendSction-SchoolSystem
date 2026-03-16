@@ -182,27 +182,27 @@ res.send({
 }
 //to be edited
 
-        if(fetchedParentData.password===inputtedPassword)
-        {
+//         if(fetchedParentData.password===inputtedPassword)
+//         {
 
-const token = generateRandomToken();
+// const token = generateRandomToken();
             
-            res.send({
-                message:"Login Successful",
-                data:{
-                    email:fetchedParentData.email,
-                    token:token,
-                    id:fetchedParentData._id,
-                    image:fetchedParentData.image     //profile pic url
-                }
-            })
-        }
+//             res.send({
+//                 message:"Login Successful",
+//                 data:{
+//                     email:fetchedParentData.email,
+//                     token:token,
+//                     id:fetchedParentData._id,
+//                     image:fetchedParentData.image     //profile pic url
+//                 }
+//             })
+//         }
 
 
-function generateRandomToken(length = 32) {
-  // Generate random bytes and convert to a hex string
-  return crypto.randomBytes(length).toString('hex');
-}
+// function generateRandomToken(length = 32) {
+//   // Generate random bytes and convert to a hex string
+//   return crypto.randomBytes(length).toString('hex');
+// }
 //const token = generateRandomToken();
 //console.log(token);
 
