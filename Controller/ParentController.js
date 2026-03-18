@@ -72,15 +72,15 @@ const getParents=async(req,res)=>{
 //get particular data with id
 const getParentById=async(req,res)=>{
     try{
-        const id=req.params.parantssid;
+        const id=req.params.parentid;
 
         const Parent=await ParentModel.findById(id);
         if(!Parent){
-            res.send({
+           return res.send({
                 message:"Parent data not available"
             })
         }
-        res.send({
+        return res.send({
             message:"Parent data fetched successfully",
             data:Parent
         })
@@ -152,7 +152,7 @@ const ParentLogin=async(req,res)=>{
         }
 
 
-        //to be edited
+  
 const isMatch = await bcrypt.compare(inputtedPassword, fetchedParentData.password);
 
 if (!isMatch) {
@@ -170,7 +170,8 @@ const token = jwt.sign(
 res.send({
  message: "Login successful",
  token: token,
-  id:fetchedParentData._id
+  id:fetchedParentData._id,
+  name:fetchedParentData.Name
 });
 
 } catch (error) {
