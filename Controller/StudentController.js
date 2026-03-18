@@ -1,6 +1,8 @@
 const StudentModel=require("../Models/StudentsModel");
 //const { get } = require("../Routes/StudentsRoute");
 const generator=require("generate-password");
+const mongoose=require("mongoose");
+const crypto=require("crypto");
 
 
 const createStudent=async(req,res)=>{
