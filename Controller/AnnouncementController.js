@@ -36,6 +36,43 @@ const cloudinary = require("../config/cloudinary");
 //   }
 // };
 
+// check
+
+// exports.createAnnouncement = async (req, res) => {
+//   try {
+//     const { title, description } = req.body;
+
+//     let imageUrl = "";
+
+//     if (req.file) {
+//       const result = await cloudinary.uploader.upload_stream(
+//         { folder: "announcements" },
+//         async (error, result) => {
+//           if (error) return res.status(500).json({ error });
+
+//           const announcement = await Announcement.create({
+//             title,
+//             description,
+//             imageUrl: result.secure_url,
+//           });
+
+//           res.json(announcement);
+//         }
+//       );
+
+//       result.end(req.file.buffer);
+//     } else {
+//       const announcement = await Announcement.create({
+//         title,
+//         description,
+//       });
+//       res.json(announcement);
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
 
 
 const createNotice=async(req,res)=>{
