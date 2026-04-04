@@ -38,7 +38,7 @@ const cloudinary = require("../config/cloudinary");
 
 
 
-// check
+// check this for cloudinary section
 
 // exports.createAnnouncement = async (req, res) => {
 //   try {
