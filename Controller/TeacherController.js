@@ -143,22 +143,27 @@ const TeacherLogin=async(req,res)=>{
     const{email,password}=req.body;
     try {
         if(!email||!password){
-            res.send({
+           return res.send({
                 message:"Enter Valid email and password"
             })
         }
-        const fetchedTeacherData=await TeacherModel.findOne({email:email});
+        const fetchedTeacherData=await TeacherModel.findOne({Email:email});
         if(!fetchedTeacherData){
-            res.send({
+           return res.send({
                 message:"No matching email found"
             })
         }
-        if(fetchedTeacherData.password===password)
+        if(fetchedTeacherData.Password===password)
         {
-            res.send({
+            const token = generateRandomToken();
+             console.log(token);
+            return res.send({
                 message:"Login Successful",
                 data:{
-                    email:fetchedTeacherData.email
+                    email:fetchedTeacherData.email,
+                    name:fetchedTeacherData.name,
+                    id:fetchedTeacherData._id,
+                    token:token
                     //image
                 }
             })
@@ -169,8 +174,8 @@ function generateRandomToken(length = 32) {
   // Generate random bytes and convert to a hex string
   return crypto.randomBytes(length).toString('hex');
 }
-const token = generateRandomToken();
-console.log(token);
+// const token = generateRandomToken();
+// console.log(token);
 
 
 

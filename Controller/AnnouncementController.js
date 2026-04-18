@@ -1,129 +1,73 @@
-const AnnouncementModel=require("../Models/AnnouncementModel");
-const mongoose=require("mongoose");
+const AnnouncementModel = require("../Models/AnnouncementModel");
 const cloudinary = require("../config/cloudinary");
 
-
-
-// CREATE NOTICE
-// const createNotice = async (req, res) => {
-//   try {
-//     console.log(req.body,"req.body");
-//     const { image, text } = req.body;
-//      console.log(image,"image");
-//     // Validation
-//     if (!image || !text) {
-//       return res.status(400).json({
-//         message: "Image and Text are required",
-//       });
-//     }
-
-//     const newNotice = new AnnouncementModel({
-//       Image: image,
-//       Text: text,
-//     });
-
-//     await newNotice.save();
-
-//     res.status(201).json({
-//       message: "Notice added successfully",
-//       data: newNotice,
-//     });
-//   } catch (error) {
-//     console.error("Create Notice Error:", error);
-//     res.status(500).json({
-//       message: "Server Error",
-//     });
-//   }
-// };
-
-
-
+// CREATE ANNOUNCEMENT
 const createAnnouncement = async (req, res) => {
   try {
     const { title, description } = req.body;
 
-    let imageUrl = "";     // 
-
-    if (req.file) {
-      const result = await cloudinary.uploader.upload_stream(
-        { folder: "announcements" },
-        async (error, result) => {
-          if (error) return res.status(500).json({ error });
-
-          const announcement = await Announcement.create({
-           Title:title,
-            Description:description,
-            ImageUrl: result.secure_url,
-          });
-
-          res.json(announcement);
-        }
-      );
-
-      result.end(req.file.buffer);
-    } else {
-      const announcement = await Announcement.create({
-        Title:title,
-        Description:description,  //need to be checked
-      });
-      res.json(announcement);
+    if (!title || !description) {
+      return res.status(400).json({ message: "Title and Description are required" });
     }
+
+    let imageUrl = "";
+    if (req.file && req.file.path) {
+      imageUrl = req.file.path; // Multer-storage-cloudinary provides the path
+    }
+
+    const announcement = await AnnouncementModel.create({
+      Title: title,
+      Description: description,
+      ImageUrl: imageUrl,
+    });
+
+    res.status(201).json({
+      message: "Announcement added successfully",
+      data: announcement
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Create Announcement Error:", err);
+    res.status(500).json({ message: "Server Error", error: err.message });
   }
 };
 
+// GET ALL ANNOUNCEMENTS
+const getAllNotices = async (req, res) => {
+  try {
+    const announcements = await AnnouncementModel.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      message: "Announcements fetched successfully",
+      data: announcements
+    });
+  } catch (error) {
+    console.error("Fetch Announcements Error:", error);
+    res.status(500).json({ message: "Error fetching announcements" });
+  }
+};
 
-
-// const createNotice=async(req,res)=>{
-//     console.log("annoucements");
-//     const {image,text}=req.body;
-//     try {
-//       const newNotice=new AnnouncementModel({
-//         Image:image,
-//         Text:text
-//       });
-//       await newNotice.save();
-//       const resData={
-//         image:newNotice.Image,
-//         text:newNotice.Text
-//       } 
-//       console.log(resData);
-//       res.send({
-//         message:"notice added",
-//         data:resData
-//       }); 
-//     } catch (error) {
-//       console.log(error,"notice error");  
-//     }
-// };
-
-const getAllNotices=async(req,res)=>{
-    try{
-        const AllNotices=await AnnouncementModel.find();
-        res.send({
-            message:"Notices fetched successfully",
-            data:AllNotices
-    })
-    }catch(error){
-        res.send({
-            message:"Error",
-        })
-        console.log(error,"error notice");
-    }
+// DELETE ANNOUNCEMENT
+const deleteNotice = async (req, res) => {
+  try {
+    const { noticeid } = req.params;
+    const announcement = await AnnouncementModel.findById(noticeid);
     
-}
-const deleteNotice=async(req,res)=>{
-  const id=req.params.noticeid;
-    const IsNotice=await AnnouncementModel.findById(id); 
-    if(!IsNotice){
-        res.send({
-            message:"No notice"
-        })
+    if (!announcement) {
+      return res.status(404).json({ message: "Announcement not found" });
     }
-   await AnnouncementModel.findByIdAndDelete(id);
-   res.send({
-    message:"Notice deleted successfully"
-   })
-}
-module.exports={createAnnouncement,getAllNotices,deleteNotice}
+
+    // Optional: Delete from cloudinary if ImageUrl exists
+    // if (announcement.ImageUrl) {
+    //   const publicId = announcement.ImageUrl.split('/').pop().split('.')[0];
+    //   await cloudinary.uploader.destroy(publicId);
+    // }
+
+    await AnnouncementModel.findByIdAndDelete(noticeid);
+    res.status(200).json({ message: "Announcement deleted successfully" });
+  } catch (err) {
+    console.error("Delete Announcement Error:", err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+module.exports = { createAnnouncement, getAllNotices, deleteNotice };
+

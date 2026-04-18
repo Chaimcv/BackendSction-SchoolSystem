@@ -1,44 +1,48 @@
-const mongoose=require("mongoose");
-const StudentSchema=mongoose.Schema({
-    Name:{
-      type:String
+const mongoose = require("mongoose");
+
+const StudentSchema = mongoose.Schema({
+    Name: {
+        type: String
     },
-    Email:{
-        type:String,
-        require:true,
-        unique:true
+    Email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    Password:{
-        type:String,
-        require:true
+    Password: {
+        type: String,
+        required: true
     },
-    Age:{
-       type:Number
+    Age: {
+        type: Number
     },
-    Gender:{
-      type:String
+    Gender: {
+        type: String
     },
-    Standard:{
-        type:Number
+    Standard: {
+        type: Number
     },
-    Division:{
-        type:String
+    Division: {
+        type: String
     },
-    Guardian:{
-        type:String
+    Guardian: {
+        type: String
     },
-    Guardian_Phonenumber:{
-        type:Number
+    Guardian_Phonenumber: {
+        type: Number
     },
-    Address:{
-        type:String
+    Address: {
+        type: String
     },
-    Pincocde:{
-      type:String
+    Pincode: {
+        type: String
     },
+    ProfileImageUrl: {
+        type: String
+    }
 },
 {
-    Timestamp:true
-},
-)
-module.exports=mongoose.model("Students",StudentSchema);
+    timestamps: true
+});
+
+module.exports = mongoose.model("Students", StudentSchema);

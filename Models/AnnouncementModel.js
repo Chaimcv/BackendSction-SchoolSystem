@@ -1,16 +1,20 @@
-const mongoose=require("mongoose");
-const AnnouncementSchema=mongoose.Schema({
-    ImageUrl:{
-    type:String
+const mongoose = require("mongoose");
+const AnnouncementSchema = mongoose.Schema({
+    ImageUrl: {
+        type: String
     },
-    Title:{
-        type:String
+    Title: {
+        type: String,
+        required: true
     },
-    Description:{
-        type:String
+    Description: {
+        type: String,
+        required: true
     }
 },
 {
-    Timestamp:true
-})
-module.exports=mongoose.model("announcement",AnnouncementSchema);
+    timestamps: true
+});
+
+module.exports = mongoose.model("announcement", AnnouncementSchema);
+

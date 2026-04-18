@@ -4,9 +4,9 @@ const ParentRouter=express.Router();
 
 ParentRouter.post("/",createParent);
 ParentRouter.get("/",getParents);
-ParentRouter.get("/:teachersid",getParentById);
-ParentRouter.put("/:teacherid",updateParent);
-ParentRouter.delete("/:teacherid",deleteParent);
+ParentRouter.get("/:parentid",getParentById);
+ParentRouter.put("/:parentid",updateParent);
+ParentRouter.delete("/:parentid",deleteParent);
 ParentRouter.post("/login",ParentLogin);
 
 module.exports=ParentRouter;
