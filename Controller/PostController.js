@@ -38,3 +38,24 @@ exports.getPosts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.likePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    const alreadyLiked = post.likes.includes(req.Student.id);
+
+    if (alreadyLiked) {
+      post.likes = post.likes.filter(
+        (id) => id.toString() !== req.Student.id
+      );
+    } else {
+      post.likes.push(req.user.id);
+    }
+
+    await post.save();
+    res.json(post.likes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
