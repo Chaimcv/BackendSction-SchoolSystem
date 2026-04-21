@@ -39,11 +39,11 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-exports.likePost = async (req, res) => {
+exports.likePost = async (req, res) => {       // toggle like=👉 If the user already liked the post → remove like,👉 If not → add like
   try {
     const post = await Post.findById(req.params.id);
 
-    const alreadyLiked = post.likes.includes(req.Student.id);
+    const alreadyLiked = post.likes.includes(req.Student.id);  //the id of student who already liked
 
     if (alreadyLiked) {
       post.likes = post.likes.filter(
@@ -55,6 +55,25 @@ exports.likePost = async (req, res) => {
 
     await post.save();
     res.json(post.likes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.addComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    const post = await Post.findById(req.params.id);
+
+    post.comments.push({
+      user: req.Student.id,
+      text
+    });
+
+    await post.save();
+
+    res.json(post.comments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

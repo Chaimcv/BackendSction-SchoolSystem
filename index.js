@@ -13,6 +13,7 @@ const ParentRouter = require("./Routes/ParentRoute");
 const AnnouncementRouter = require("./Routes/AnnouncementRoute");
 //to establish connection btw frontend and backend
 const cors = require('cors');
+const PostRouter = require("./Routes/PostRoute");
 
 app.use(cors({ origin: ['http://localhost:3000'] }));       //frontend runs in port 3000
 
@@ -27,6 +28,7 @@ app.use("/teacher",TeacherRouter);                          //teacher section ro
 app.use("/student",StudentRouter);
 app.use("/parent",ParentRouter);
 app.use("/announcements",AnnouncementRouter);
+app.use("/post",PostRouter);
 
 
 //dAsnOnxqI61p9HFo
