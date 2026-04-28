@@ -1,9 +1,8 @@
-const PostModel=require("../Models/PostModel");
-const mongoose=require("mongoose");
-
+const PostModel = require("../Models/PostModel");
+const mongoose = require("mongoose");
 const cloudinary = require("../config/cloudinary");
 
-//create post
+// Create Post
 exports.createPost = async (req, res) => {
   try {
     const { Text } = req.body;
@@ -11,75 +10,139 @@ exports.createPost = async (req, res) => {
 
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);   //uploads the url from frontend to cloudinary
-      image = result.secure_url;   //secure_url=HTTPS version(safe for browser)
+      imageUrl = result.secure_url;   //result.secure_url saves the secure HTTPS link returned by Cloudinary.
     }
 
-    const newPost = await Post.create({
-      Student: req.Student.id,     //only loggedin student can create post
-      Text,
-      ImageUrl: image
+    const newPost = await PostModel.create({
+      student: req.Student.id,     //only loggedin student can create post
+      text: Text,
+      imageUrl: imageUrl
     });
 
-    res.status(201).json({message:"new post created in controller",
-      data:newPost});  //created successfully
-    
+    const populatedPost = await PostModel.findById(newPost._id).populate("student", "Name ProfileImageUrl");
+
+    res.status(201).json({
+      message: "Post created successfully",
+      data: populatedPost  //name and profileimageUrl will be send to frontend
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// Get All Posts
 exports.getPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
-      .populate("Student", "Name")    // by using populate,datas would be more structured and name also added(frontend shows name and not just ID)
-      .populate("Comments.Student", "Name")
+    const posts = await PostModel.find()
+
+      .populate("student", "Name ProfileImageUrl")    // by using populate,datas would be more structured and name also added(frontend shows name and not just ID)
+      .populate("comments.student", "Name ProfileImageUrl")
       .sort({ createdAt: -1 }); //descending order,i.e latest post first
 
-    res.json(posts);
-    res.send({
-      message:"All posts",
-      data:posts
-    })
+
+
+    res.json({
+      message: "All posts fetched successfully",
+      data: posts
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.likePost = async (req, res) => {       // toggle like=👉 If the user already liked the post → remove like,👉 If not → add like
+// Update Post
+exports.updatePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await PostModel.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-    const alreadyLiked = post.likes.includes(req.Student.id);  //the id of student who already liked
+    // Check ownership
+    if (post.student.toString() !== req.Student.id) {
+      return res.status(403).json({ message: "Unauthorized to edit this post" });
+    }  //It compares the ID of the post's creator with the ID of the logged-in user. If they don't match, it returns 403 Unauthorized.
 
-    if (alreadyLiked) {
-      post.likes = post.likes.filter(
-        (id) => id.toString() !== req.Student.id
-      );
-    } else {
-      post.likes.push(req.user.id);
+    const { Text } = req.body;
+    if (Text) post.text = Text;  // If a new Text or a new image is provided, it updates those specific fields.
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      post.imageUrl = result.secure_url;
     }
 
     await post.save();
-    res.json(post.likes);
+    const updatedPost = await PostModel.findById(post._id) //Saves the changes, re-populates the data for the UI, and sends back the result.
+      .populate("student", "Name ProfileImageUrl")
+      .populate("comments.student", "Name ProfileImageUrl");
+
+    res.json({ message: "Post updated successfully", data: updatedPost });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.addComment = async (req, res) => {
+// Delete Post
+exports.deletePost = async (req, res) => {
   try {
+    const post = await PostModel.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    // Finds the post and performs the same Ownership Check as the update function to prevent students from deleting each other's posts.
+    // Check ownership
+    if (post.student.toString() !== req.Student.id) {
+      return res.status(403).json({ message: "Unauthorized to delete this post" });
+    }
+
+    await PostModel.findByIdAndDelete(req.params.id);
+    res.json({ message: "Post deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Like/Unlike Post
+exports.likePost = async (req, res) => {
+  try {
+    const post = await PostModel.findById(req.params.id);
+
+    const studentId = req.Student.id;
+    const alreadyLiked = post.likes.some(id => id.toString() === studentId);
+
+    if (alreadyLiked) {
+      post.likes = post.likes.filter((id) => id.toString() !== studentId);
+    } else {
+      post.likes.push(studentId);
+    }
+
+    await post.save();
+    
+    // Return fully populated post to keep frontend perfectly synced
+    const updatedPost = await PostModel.findById(post._id)
+      .populate("student", "Name ProfileImageUrl")
+      .populate("comments.student", "Name ProfileImageUrl");
+
+    res.json({ message: alreadyLiked ? "Unliked" : "Liked", data: updatedPost });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Add Comment
+exports.addComment = async (req, res) => {
+  try {  //Gets the comment text and finds the target post.
     const { text } = req.body;
-
-    const post = await Post.findById(req.params.id);
-
+    const post = await PostModel.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    // Pushes a new object into the Comments array containing the student's ID and their text.
     post.comments.push({
-      user: req.Student.id,
+      student: req.Student.id,
       text
     });
 
     await post.save();
+    const updatedPost = await PostModel.findById(post._id)
+      .populate("student", "Name ProfileImageUrl")
+      .populate("comments.student", "Name ProfileImageUrl");
 
-    res.json(post.comments);
+    res.json({ message: "Comment added successfully", data: updatedPost });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

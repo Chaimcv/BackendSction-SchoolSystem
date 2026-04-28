@@ -1,11 +1,24 @@
 const express = require("express");
-const PostRouter=express.Router();
-const{createPost,getPosts,likePost,addComment}=require("../Controller/PostController");
-// const auth = require("../middleware/auth");
+const PostRouter = express.Router();
+const {
+  getPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  addComment
+} = require("../Controller/PostController");
+const auth = require("../middleware/auth");
+const upload = require("../middleware/uploads");
 
-PostRouter.post("/create", createPost); 
+// Basic Feed (Public)
 PostRouter.get("/", getPosts);
-PostRouter.post("/:id/like", likePost);
-PostRouter.post("/:id/comment",addComment);
+
+// Protected Interactions
+PostRouter.post("/create", auth, upload.single("postImage"), createPost);
+PostRouter.put("/:id", auth, upload.single("postImage"), updatePost);
+PostRouter.delete("/:id", auth, deletePost);
+PostRouter.post("/:id/like", auth, likePost);
+PostRouter.post("/:id/comment", auth, addComment);
 
 module.exports = PostRouter;
